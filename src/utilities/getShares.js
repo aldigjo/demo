@@ -1,8 +1,8 @@
-import SharesContract from '../utilities/SharesContract'
+import TicketContract from '../utilities/TicketContract'
 
 async function getShares (addr, actions) {
   actions.getCurrentSharesREQUEST()
-  SharesContract.getShares
+  TicketContract.hasTicket
     .call(addr, (error, sharesNumber) => {
       if (error) {
         actions.getCurrentSharesERROR(error)
