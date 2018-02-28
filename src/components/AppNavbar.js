@@ -27,6 +27,10 @@ const DemoText = styled.span`
 const LeftArea = styled.div`
   display: block;
 `
+
+const CenterArea = styled.section`
+`
+
 const RightArea = styled.div`
   display: block;
   text-align: left;
@@ -54,15 +58,26 @@ const UportAvatar = styled.img`
 `
 
 class AppNavbar extends Component {
+  verifyPage () {
+    this.props.actions.verifyCredential()
+  }
+
   render () {
     return (
       <NavBar>
         
         <LeftArea>
-          <LogoLink href='/'>uport</LogoLink>
+          <LogoLink href='/'>Ethereum Event</LogoLink>
           <span> | </span>
           <DemoText>Demo</DemoText>
         </LeftArea>
+
+        {/* <CenterArea>
+          <verifyButton
+            onClick={this.verifyPage}>
+            Verify
+          </verifyButton>
+        </CenterArea> */}
 
         <RightArea>
           {

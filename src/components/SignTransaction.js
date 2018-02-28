@@ -5,7 +5,9 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import * as AppActions from '../actions/AppActions'
 
-import SharesContract from '../utilities/SharesContract'
+import { uport } from '../utilities/uportSetup'
+
+import TicketContract from '../utilities/TicketContract'
 import waitForMined from '../utilities/waitForMined'
 import checkAddressMNID from '../utilities/checkAddressMNID'
 import getShares from '../utilities/getShares'
@@ -54,18 +56,15 @@ class SignTransaction extends Component {
   buyShares (e) {
     e.preventDefault()
 
-    console.log('buyShares')
-
+    this.props.actions.updatesharesInput(1)
     let sharesNumber = this.props.sharesInput
     const addr = checkAddressMNID(this.props.uport.address)
     const actions = this.props.actions
 
-    console.log({sharesNumber, addr, actions})
-
     this.props.actions.buySharesREQUEST(sharesNumber)
 
-    SharesContract.updateShares(sharesNumber, (error, txHash) => {
-      console.log('updateShares')
+    TicketContract.buyTicket((error, txHash) => {
+      console.log('buyTicket')
       if (error) { this.props.actions.buySharesERROR(error) }
       waitForMined(addr, txHash, { blockNumber: null }, actions,
         () => {
@@ -74,6 +73,12 @@ class SignTransaction extends Component {
         (total) => {
           console.log('waitForMined complete')
           this.props.actions.buySharesSUCCESS(txHash, total)
+          uport.attestCredentials({
+            sub: this.props.uport.address,
+            claim: {ticket: this.props.uport.name},
+            exp: new Date().getTime() + 30 * 24 * 60 * 60 * 1000,  // 30 days from now
+            uriHandler: (log) => { console.log(log) }
+          })
         }
       )
     })
@@ -91,16 +96,9 @@ class SignTransaction extends Component {
   render () {
     return (
       <SharesWrap>
-        <h4>Sign a transaction</h4>
-        <SubText>Buy Shares</SubText>
+        <h4>Register For Event</h4>
 
         <SharesArea>
-          <CurrentSharesArea >
-            <span>Your current shares: </span>
-            <br />
-            <CurrentSharesNumber>{this.props.sharesTotal}</CurrentSharesNumber>
-          </CurrentSharesArea>
-
           {
             this.props.buyingInProgress
               ? (
@@ -114,22 +112,14 @@ class SignTransaction extends Component {
                   <br />
                 </div>
               )
+              : this.props.txHash ? <div> your ticket should be arriving to your phone! </div>
               : (
                 <FormBuyshares>
-                  <FormRow>
-                    <label>Shares to Buy: </label>
-                    <input
-                      id='sharesInput'
-                      type='number'
-                      style={{"paddingLeft":".5em", "font-size":"16px"}}
-                      onChange={this.handleInputChange}
-                      value={this.props.sharesInput} />
-                  </FormRow>
                   <FormRow>
                     <br />
                     <BtnBuyShares
                       onClick={this.buyShares}>
-                      Buy Shares
+                      Buy Ticket
                     </BtnBuyShares>
                   </FormRow>
                   <FormRow>
@@ -150,11 +140,6 @@ class SignTransaction extends Component {
             : null
         }
 
-              <NextButton
-                onClick={this.props.actions.buySharesDemoComplete}>
-                Next
-              </NextButton>
-
       </SharesWrap>
     )
   }
@@ -169,7 +154,9 @@ const mapStateToProps = (state, props) => {
     sharesTotal: state.App.sharesTotal,
     buyingInProgress: state.App.buyingInProgress,
     tx: state.App.tx,
-    error: state.App.error
+    error: state.App.error,
+    ticketPurchased: state.App.ticketPurchased,
+    txHash: state.App.txHash
   }
 }
 const mapDispatchToProps = (dispatch) => {
