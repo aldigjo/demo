@@ -14,6 +14,7 @@ import SignTransaction from './components/SignTransaction'
 import CollectCredentials from './components/CollectCredentials'
 import RegisterYourApp from './components/RegisterYourApp'
 import LogOut from './components/LogOut'
+import Verify from './components/Verify'
 
 const AppWrap = styled.div`
   display: flex;
@@ -40,7 +41,8 @@ class App extends Component {
         <AppBody>
           {
             !this.props.uport &&
-            !this.props.signTransactionPage
+            !this.props.signTransactionPage &&
+            !this.props.verify
               ? <Welcome />
               : null
           }
@@ -67,6 +69,12 @@ class App extends Component {
               ? <LogOut />
               : null
           }
+          {
+            !this.props.uport &&
+            this.props.verify
+              ? <Verify />
+              : null
+          }
         </AppBody>
       </AppWrap>
     )
@@ -79,7 +87,8 @@ const mapStateToProps = (state, props) => {
     signTransactionPage: state.App.signTransactionPage,
     collectCredentialsPage: state.App.collectCredentialsPage,
     registerYourAppPage: state.App.registerYourAppPage,
-    logOutPage: state.App.logOutPage
+    logOutPage: state.App.logOutPage,
+    verify: state.App.verifyPage
   }
 }
 const mapDispatchToProps = (dispatch) => {

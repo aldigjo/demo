@@ -76,6 +76,11 @@ export default(state = initialState, payload) => {
         uport: null,
         logOutPage: true
       }
+    case 'VERIFY':
+      return {
+        ...state,
+        verifyPage: true
+      }
     default:
       return state
   }

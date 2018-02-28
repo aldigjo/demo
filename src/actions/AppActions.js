@@ -97,3 +97,10 @@ export const registerAppAreaComplete = (data) => {
     type: 'LOGOUT'
   }
 }
+
+
+export const verifyCredential = (data) => {
+  return {
+    type: 'VERIFY'
+  }
+}
