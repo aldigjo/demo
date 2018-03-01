@@ -38,34 +38,34 @@ class Verify extends Component {
         verified: ['ticket'],
         notifications: true }
     ).then((credentials) => {
-        console.log({credentials})
-        console.log(credentials.verified[0].jwt)
-        JWT.verifyJWT({registry: this.registry, address: '2oeXufHGDpU51bfKBsZDdu7Je9weJ3r7sVG'}, credentials.verified[0].jwt)
+        JWT.verifyJWT({registry: this.registry, address: '35DDXwF6Hdr6dQQo1BRwQru7W3d54avzBwk'}, credentials.verified[0].jwt)
         .then(payload => {
-            console.log('HERE')
-            console.log(payload)
+          this.props.actions.verifyCredentialSUCCESS(payload)
         })
-        //this.props.actions.connectUport(credentials)
     })
   }
 
   render () {
     return (
-      <VerifyWrap>
-        <h4>Ethereum Meetup SF</h4>
-        <SubText>RSVP with uPort</SubText>
-        <ConnectUport
-          onClick={this.connectUport}>
-          Connect
-        </ConnectUport>
-      </VerifyWrap>
+      this.props.verification ? <div> Success!  </div>
+      : ( 
+        <VerifyWrap>
+          <h4>Ethereum Meetup SF</h4>
+          <SubText>RSVP with uPort</SubText>
+          <ConnectUport
+            onClick={this.connectUport}>
+            Verify
+          </ConnectUport>
+        </VerifyWrap>
+      )
     )
   }
 }
 
 const mapStateToProps = (state, props) => {
   return {
-    uport: state.App.uport
+    uport: state.App.uport,
+    verification: state.App.verification
   }
 }
 const mapDispatchToProps = (dispatch) => {

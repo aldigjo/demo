@@ -104,3 +104,16 @@ export const verifyCredential = (data) => {
     type: 'VERIFY'
   }
 }
+
+export const verifyCredentialSUCCESS = (data) => {
+  return {
+    type: 'VERIFY_CREDENTIAL_SUCCESS',
+    data
+  }
+}
+
+export const verifyCredentialFAIL = () => {
+  return {
+    type: 'VERIFY_CREDENTIAL_FAIL'
+  }
+}

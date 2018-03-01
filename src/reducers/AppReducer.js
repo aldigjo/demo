@@ -10,7 +10,6 @@ export default(state = initialState, payload) => {
         uport: payload.data,
         signTransactionPage: true
       }
-      
     case 'GET_CURRENT_SHARES_REQUEST':
       return {
         ...state,
@@ -80,6 +79,16 @@ export default(state = initialState, payload) => {
       return {
         ...state,
         verifyPage: true
+      }
+    case 'VERIFY_CREDENTIAL_SUCCESS':
+      return {
+        ...state,
+        verification: payload.data
+      }
+    case 'VERIFY_CREDENTIAL_FAIL':
+      return {
+        ...state,
+        verification: 'fail'
       }
     default:
       return state
