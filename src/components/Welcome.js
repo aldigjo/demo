@@ -54,6 +54,7 @@ class Welcome extends Component {
   verifyCredential () {
     uport.requestCredentials(
       { requested: ['name'],
+        accountType: 'segregated',
         verified: ['ticket'],
         notifications: true }
     ).then((credentials) => {
